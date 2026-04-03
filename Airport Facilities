@@ -1,0 +1,107 @@
+Airport Facilities: Maintenance Reporting & Tracking
+A Step-by-Step ServiceNow Project Guide for Beginners
+This guide will walk you through building your Airport Facilities Maintenance app from scratch. ServiceNow is a cloud-based platform designed to automate and digitize business processes. Think of it as a massive, highly customizable ticketing and workflow system.
+Since you have no prior knowledge, we will build this project phase-by-phase without writing code, using ServiceNow's powerful drag-and-drop tools!
+________________________________________
+Phase 1: Getting Your Free ServiceNow Sandbox (PDI)
+Before building, you need a safe environment to learn and develop. ServiceNow offers free "Personal Developer Instances" (PDIs).
+Step-by-Step:
+1.	Go to developer.servicenow.com.
+2.	Click Sign Up and Start Building and create an account.
+3.	Once logged in, click Request Instance in the top right corner.
+4.	Choose the latest release (e.g., "Washington DC" or "Vancouver").
+5.	Once your instance is ready, click Start Building to log into your own ServiceNow environment.
+________________________________________
+Phase 2: Building the Foundation (The Database)
+We need a place to store all the maintenance tickets. This is called a Table in ServiceNow. We will create a custom application for the airport.
+Step-by-Step:
+1.	In the top-left All menu (the search bar), type App Engine Studio (or just Studio).
+2.	OPTIONAL:Click Create App and name it "Airport Facility Management".
+3.	OPTIONAL:Inside your new app, click Add Data. Choose Create a table from scratch.
+4.	Name the table "Airport Facility Management" and check the box that says "Extends an existing table". Choose "Task" from the dropdown (this gives us built-in features like a State, Assigned To, and Work Notes).
+5.	Add custom columns (fields) to your table:
+•	Location: (Type: Choice) Add choices like Terminal A, Terminal B, Restroom 101.
+•	Issue Type: (Type: Choice) Add choices like Plumbing, Electrical, Cleaning, Broken Escalator.
+•	Passenger Name: (Type: String) So they can optionally leave their name.
+•	Passenger Email
+•	Priority
+•	Location
+•	Description
+•	Status
+6.	Click Save.
+________________________________________
+Phase 3: The Front-End for Passengers (Service Catalog)
+Passengers and staff shouldn't see the complex database backend. We need to create a simple, user-friendly form on a web portal. In ServiceNow, a form that creates a ticket is called a Record Producer.
+Step-by-Step:
+1.	In the All menu, type Record Producers and select it under Service Catalog.
+2.	Click New.
+3.	Name: Report a Facility Issue.
+4.	Table name: Select the Airport Facility Management table you created in Phase 2.
+5.	In the Variables tab at the bottom, add the questions you want the user to answer:
+•	"What is the issue type?" (Map to field: Issue Type)
+•	"Where are you located?" (Map to field: Location)
+•	"Please describe the problem." (Map to field: Description)
+6.	Save. Now, anyone going to the Airport's Self-Service Portal can fill out this form in seconds!
+________________________________________
+Phase 4: Automating Task Routing (Assignment Rules)
+When an issue is reported, we want ServiceNow to automatically send it to the right team so it gets fixed fast.
+Step-by-Step:
+1.	First, create the teams. Type Groups in the All menu (under User Administration).
+2.	Create new groups: "Airport Cleaning Team" and "Airport Electrical Team" and  "Airport Security Team" and  "Airport Mechanical Team" and  "Airport Maintenance Team" .
+3.	Now, type Assignment Rules in the All menu and select it.
+4.	Click New.
+•	Name: Assign Plumbing Issues.
+•	Table: Airport Facility Management.
+•	Conditions: If [Issue Type] [is] [Cleaning].
+•	Assign To tab: Select group "Airport Cleaning Team".
+5.	Save and repeat this process to route "Electrical" issues to the Electrical Team and etc.
+________________________________________
+Phase 5: Building the Automated Workflow (Flow Designer)
+We need to automate the process of tracking the issue and moving things along. Flow Designer is a visual drag-and-drop tool for this.
+Step-by-Step:
+1.	In the All menu, type Flow Designer and open it.
+2.	Click New > Flow. Name it "Facility Issue Process".
+3.	Trigger: Set the trigger to Created and select your Airport Facility Management table. (This means the flow starts whenever a new issue is submitted).
+4.	Action 1 (Triage): Add an action to Update Record. Set the state of the ticket to "Work in Progress" once an Assignment Group claims it.
+5.	Action 2 (Escalation): Add a Timer to wait 24 hours. After the timer, add an If condition: "If State is still Work in Progress", then send an email exactly to the Manager to escalate it.
+6.	Activate the flow.
+________________________________________
+Phase 6: Sending Real-Time Alerts (Notifications)
+Users love knowing their report was heard! We need to send them a confirmation email.
+Step-by-Step:
+1.	Type Notifications in the All menu (under System Notification > Email).
+2.	Click New.
+•	Name: Facility Issue Received.
+•	Table: Facility Issue.
+•	When to send: Record inserted or updated (check "Inserted").
+•	Who will receive: Select the field containing the reporter's email like Passenger’s Email.
+•	What it will contain:
+•	Subject: We've received your report!
+•	Message body: "Thank you for helping us keep our airport clean and safe. Our team has been assigned your ticket regarding: ${issue_type} at ${location}." (The ${ } syntax automatically pulls standard data from the ticket!).
+3.	Save.
+________________________________________
+Phase 7: Tracking Health (Dashboards & Reports)
+Airport management needs to see if restrooms are constantly breaking or if the plumbing team is too slow.
+Step-by-Step:
+1.	Navigate to Reports > Create New.
+2.	Data: Select your Airport Facility Management table.
+3.	Type: Choose Pie Chart.
+4.	Configure: "Group by" the Issue Type field. This will show a pie chart of what breaks most often (e.g., 60% plumbing, 40% simple cleaning).
+5.	Click Save.
+6.	Navigate to Self-Service > Dashboards. Create a new Dashboard called "Airport Maintenance Hub" and add your new Pie Chart to it.
+________________________________________
+Phase 8: Empowering Users (Knowledge Base)
+Some issues don't need a technician (e.g., how to use the automated towel dispensers or self-service bag drop).
+Step-by-Step:
+1.	Type Knowledge in the All menu and select Create New Article.
+2.	Select the "IT" or similar Knowledge Base.
+3.	Title: "How to use the automatic hand dryers in Terminal B".
+4.	Text: Write a brief guide.
+5.	Publish it. Now, when users search the portal for help, they might find their answer without needing to submit a ticket!
+________________________________________
+Phase 9: Mobile App Setup (Now Mobile)
+Passengers are on the move! The "Now Mobile" app allows them to report issues from their phones. ServiceNow makes this incredibly easy. The Service Catalog form (Record Producer) we built in Phase 3 is automatically responsive.
+1.	You can download the ServiceNow Now Mobile app from the iOS/Android App Store.
+2.	Log in using your PDI link and credentials.
+3.	The "Report a Facility Issue" catalog item will be visible, allowing you to submit a ticket straight from your smartphone!
+________________________________________
