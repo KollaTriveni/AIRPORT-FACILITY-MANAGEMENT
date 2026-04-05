@@ -35,7 +35,7 @@ Passengers and staff shouldn't see the complex database backend. We need to crea
 Step-by-Step:
 1.	In the All menu, type Record Producers and select it under Service Catalog.
 2.	Click New.
-3.	Name: Report a Facility Issue.
+3.	Name: Facility Management.
 4.	Table name: Select the Airport Facility Management table you created in Phase 2.
 5.	In the Variables tab at the bottom, add the questions you want the user to answer:
 •	"What is the issue type?" (Map to field: Issue Type)
